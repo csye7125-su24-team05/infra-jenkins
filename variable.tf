@@ -1,10 +1,10 @@
 variable "aws_access_key" {
-  type = string
+  type      = string
   sensitive = true
 }
 
 variable "aws_secret_key" {
-  type = string
+  type      = string
   sensitive = true
 }
 
@@ -53,10 +53,10 @@ variable "sg" {
 
 variable "sg_rules" {
   type = map(object({
-    type      = string
-    from_port = number
-    to_port   = number
-    protocol  = string
+    type        = string
+    from_port   = number
+    to_port     = number
+    protocol    = string
     cidr_blocks = list(string)
   }))
 }
@@ -76,6 +76,10 @@ variable "ec2_instance" {
   type = object({
     instance_type = string
     tags          = map(string)
+    root_block_device = object({
+      volume_size = number
+      volume_type = string
+    })
   })
 }
 
