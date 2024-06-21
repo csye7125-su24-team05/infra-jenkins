@@ -11,7 +11,7 @@ terraform {
 provider "aws" {
   access_key = var.aws_access_key
   secret_key = var.aws_secret_key
-  region = "us-east-1"
+  region     = "us-east-1"
 }
 
 # Create a VPC
@@ -61,12 +61,12 @@ resource "aws_security_group" "jenkins-sg" {
 
 # Create Security Group Rules
 resource "aws_security_group_rule" "jenkins-sg-rule" {
-  for_each = var.sg_rules
-  type     = each.value.type
-  from_port = each.value.from_port
-  to_port   = each.value.to_port
-  protocol  = each.value.protocol
-  cidr_blocks = each.value.cidr_blocks
+  for_each          = var.sg_rules
+  type              = each.value.type
+  from_port         = each.value.from_port
+  to_port           = each.value.to_port
+  protocol          = each.value.protocol
+  cidr_blocks       = each.value.cidr_blocks
   security_group_id = aws_security_group.jenkins-sg.id
 }
 
@@ -92,6 +92,10 @@ resource "aws_instance" "jenkins-instance" {
   subnet_id              = aws_subnet.jenkins-subnet.id
   vpc_security_group_ids = [aws_security_group.jenkins-sg.id]
   tags                   = var.ec2_instance.tags
+  root_block_device {
+    volume_size = var.ec2_instance.root_block_device.volume_size
+    volume_type = "gp2"
+  }
 }
 
 data "aws_eip" "jenkins-eip" {
